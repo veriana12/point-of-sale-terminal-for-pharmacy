@@ -1,0 +1,138 @@
+#include <iostream>
+#include <string>
+
+const float PARACETAMOL_PRICE = 250.0;
+const float OMEPRAZOLE_PRICE = 350.0;
+int PRODUCT_QUANTITY_PARACETAMOL = 10; // units of Paracetamol available
+int PRODUCT_QUANTITY_OMEPRAZOLE = 5;   // units of Omeprazole available
+
+void inputCustomerDetails() {
+    std::cout << "Enter customer name: ";
+    std::string name;
+    std::cin >> name;
+    // Additional code to process customer details if needed
+}
+
+bool checkProductAvailability(std::string productName) {
+    if (productName == "Paracetamol") {
+        return PRODUCT_QUANTITY_PARACETAMOL > 0;
+    } else if (productName == "Omeprazole") {
+        return PRODUCT_QUANTITY_OMEPRAZOLE > 0;
+    }
+
+    return false; // Product is unavailable
+}
+
+int enterProductQuantity(std::string productName) {
+    std::cout << "Enter product quantity for " << productName << ": ";
+    int quantity;
+    std::cin >> quantity;
+
+    if (productName == "Paracetamol" && quantity > PRODUCT_QUANTITY_PARACETAMOL) {
+        std::cout << "Only " << PRODUCT_QUANTITY_PARACETAMOL << " units of Paracetamol available." << std::endl;
+        return -1; // Invalid quantity
+    } else if (productName == "Omeprazole" && quantity > PRODUCT_QUANTITY_OMEPRAZOLE) {
+        std::cout << "Only " << PRODUCT_QUANTITY_OMEPRAZOLE << " units of Omeprazole available." << std::endl;
+        return -1; // Invalid quantity
+    }
+
+    return quantity;
+}
+
+float calculateSubtotal(float price, int quantity) {
+    return price * quantity;
+}
+
+float applyDiscountsOrPromotions(float price, int quantity, std::string productName) {
+    if (quantity > 2) {
+        float discountPerItem = 0.05 * price;
+        float totalDiscount = discountPerItem * (quantity - 2);
+
+        std::cout << "Discount applied for " << productName << ": Ksh " << totalDiscount << std::endl;
+
+        return totalDiscount;
+    }
+
+    std::cout << "No discount applied for " << productName << "." << std::endl;
+    return 0;
+}
+
+void selectPaymentMethod() {
+    std::cout << "Payment Method: Cash" << std::endl;
+}
+
+void printReceipt(std::string productName, float subtotal, float total, float discount, int quantity) {
+    std::cout << "----- Receipt -----" << std::endl;
+    std::cout << "Product: " << productName << std::endl;
+    std::cout << "Quantity: " << quantity << std::endl;
+    std::cout << "Subtotal: Ksh " << subtotal << std::endl;
+
+    if (discount > 0) {
+        std::cout << "Discount: Ksh " << discount << std::endl;
+    }
+
+    std::cout << "Total: Ksh " << total << std::endl;
+    // Additional code to print other receipt details if needed
+}
+
+void updateInventory(std::string productName, int quantity) {
+    if (productName == "Paracetamol") {
+        PRODUCT_QUANTITY_PARACETAMOL -= quantity;
+    } else if (productName == "Omeprazole") {
+        PRODUCT_QUANTITY_OMEPRAZOLE -= quantity;
+    }
+}
+
+void completeSale() {
+    std::cout << "Sale completed!" << std::endl;
+}
+
+void displayOutOfStockMessage() {
+    std::cout << "Product out of stock." << std::endl;
+}
+
+void restartOrExit() {
+    // Code to restart or exit
+}
+
+int main() {
+    inputCustomerDetails();
+
+    std::string productName;
+    std::cout << "Enter product name (Paracetamol or Omeprazole): ";
+    std::cin >> productName;
+
+    if (checkProductAvailability(productName)) {
+        int quantity = enterProductQuantity(productName);
+
+        if (quantity != -1) {
+            float price, subtotal, discount = 0;
+
+            if (productName == "Paracetamol") {
+                price = PARACETAMOL_PRICE;
+            } else if (productName == "Omeprazole") {
+                price = OMEPRAZOLE_PRICE;
+            }
+
+            subtotal = calculateSubtotal(price, quantity);
+            discount = applyDiscountsOrPromotions(price, quantity, productName);
+            float total = subtotal - discount;
+
+            selectPaymentMethod();
+            printReceipt(productName, subtotal, total, discount, quantity);
+            updateInventory(productName, quantity);
+            completeSale();
+        } else {
+            restartOrExit();
+        }
+    } else {
+        displayOutOfStockMessage();
+        restartOrExit();
+    }
+
+    return 0;
+}
+
+
+    return 0;
+}
